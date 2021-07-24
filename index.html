@@ -53,36 +53,7 @@
                     }
                 );
             }
-            if(typeof(EventSource) !== "undefined") {
-            var source = new EventSource("http://localhost:3000");
-            source.onmessage = function(event) {
-                var item = data[i];
-                let username = item.username;
-                let content = item.content;
-                console.log(username + ": " + content);
-                var ul = document.createElement("ul");
-                var li = document.createElement('li');
-                var node = document.createTextNode(username + ": " + content);
-                li.appendChild(node);
-                var element = document.getElementById("messages");
-                element.appendChild(li);
-            };
-            } else {
-            document.getElementById("result").innerHTML = "Sorry, your browser does not support server-sent events...";
-            }
             fetchNewMessages();
-            //setInterval(function(){
-            //    deleteOldMessages();
-            //    fetchNewMessages();
-            //}, 3000);
-            //data.forEach(cur => {
-            //    console.log(cur);
-            //    const li = document.createElement("li");
-            //    var node = document.createTextNode("${cur.username} said: ${cur.content}");
-            //    li.appendChild(node);
-            //    var element = document.getElementById("messages");
-            //    element.appendChild(para);
-            //});
         </script>
     </div>
 </body>
