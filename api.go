@@ -43,6 +43,8 @@ func sendMessage(w http.ResponseWriter, r *http.Request) {
 }
 
 func handleRequests() {
+	webFS := http.FileServer(http.Dir("assets/"))
+	http.Handle("/", webFS)
 	http.HandleFunc("/", homePage)
 	http.HandleFunc("/messages", showAllMessages)
 	http.HandleFunc("/send", sendMessage)
