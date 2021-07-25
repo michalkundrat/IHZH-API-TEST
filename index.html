@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<head>
+    <title>IHZH msgboard</title>
+</head>
+<body>
+    <div>
+        <h1>IHZH msgboard</h1>
+        <form action="http://localhost:3000/send">
+            <label for="username">Username: </label>
+            <input type="text" name="username" required>
+            <br>
+
+            <label for="content">Message: </label>
+            <input type="text" placeholder="Enter your message here" name="content" required>
+            <br>
+            <button type="submit">Click here to send the message</button>
+        </form>
+    </div>
+    <h2>Messages:</h2>
+    <div id="messages">
+        <script>
+            function sleep(ms) {
+                return new Promise(resolve => setTimeout(resolve, ms));
+            }
+            var data01;
+            function fetchNewMessages() {
+                fetch("http://localhost:3000/messages")
+                .then(
+                    function(response) {
+                    if (response.status !== 200) {
+                        console.log('Looks like there was a problem. Status Code: ' +
+                        response.status);
+                        return;
+                    }
+                    // Examine the text in the response
+                    response.json().then(function(data) {
+                        data01 = data;
+                        console.log(data);
+                        for (let i = 0; i < data01.length; i++) {
+                            var item = data[i];
+                            let username = item.username;
+                            let content = item.content;
+                            console.log(username + ": " + content);
+                            var ul = document.createElement("ul");
+                            var li = document.createElement('li');
+                            var node = document.createTextNode(username + ": " + content);
+                            li.appendChild(node);
+                            var element = document.getElementById("messages");
+                            element.appendChild(li);
+                        }
+                    });
+                    }
+                );
+            }
+            fetchNewMessages();
+            var source = new EventSource("http://localhost:10000/sse");
+            source.onmessage = function(event) {
+                username = event.data;
+                content = event.data;
+                var ul = document.createElement("ul");
+                var li = document.createElement('li');
+                var node = document.createTextNode(username + ": " + content);
+                li.appendChild(node);
+                var element = document.getElementById("messages");
+                element.appendChild(li);
+            };
+        </script>
+    </div>
+</body>
